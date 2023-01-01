@@ -1,27 +1,26 @@
+import type {Photo} from "../types";
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
 import Link from "next/link";
 import { Tab } from "@headlessui/react";
-import Masonry from "react-masonry-css";
-// import img
-import photo1 from "../public/nature-1.jpg";
-import photo2 from "../public/nature-2.jpg";
-import photo3 from "../public/nature-3.jpg";
-import photo4 from "../public/nature-4.jpg";
-import photo5 from "../public/nature-5.jpg";
+
+import { SocialIcon } from "react-social-icons";
 // import bgimg
 import bgImg from "../public/portfolio-bg.jpg";
 // import lightbox
 import { LightGallery } from "lightgallery/lightgallery";
-import LightGalleryComponent from "lightgallery/react";
-import "lightgallery/css/lightgallery.css";
-import "lightgallery/css/lg-zoom.css";
-import "lightgallery/css/lg-thumbnail.css";
-// import plugins Gallery
-import lgThumbnail from "lightgallery/plugins/thumbnail";
-import lgZoom from "lightgallery/plugins/zoom";
+
+
 import { useRef } from "react";
+import { GetStaticProps } from "next";
+
+// importNodeFetch
+import * as nodeFetch from "node-fetch";
+import { createApi } from "unsplash-js";
+import { Gallery } from "./Gallery";
+import { getImages } from "./utils/image-util";
+
 const tabs = [
   {
     key: "all",
@@ -37,14 +36,37 @@ const tabs = [
   }
 ];
 
-const photos = [photo1, photo2, photo3, photo4, photo5];
+type HomeProps = {
+  oceans: Photo[];
+  forests: Photo[];
+};
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const unsplash = createApi({
+    accessKey: process.env.UNSPLASH_ACCES_KEY!,
+    fetch: (nodeFetch.default as unknown) as typeof fetch
+  });
+
+  const [oceans, forests] = await Promise.all([
+    getImages(unsplash, "oceans"),
+    getImages(unsplash, "forests")
+  ]);
+
+  return {
+    props: {
+      oceans,
+      forests
+    }
+  };
+};
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Home({ oceans, forests }: HomeProps) {
   const lightboxRef = useRef<LightGallery | null>(null);
   return (
     <div>
+     
       <Image
         src={bgImg}
         alt="background"
@@ -83,41 +105,16 @@ export default function Home() {
                 </Tab>
               ))}
             </Tab.List>
-            <Tab.Panels className="h-full bg-stone-900 bg-opacity-70 max-w-[900px] w-full p-2 sm:p-4 my-4">
+            <Tab.Panels className="h-full  bg-opacity-70 max-w-[900px] w-full p-2 sm:p-4 ">
               <Tab.Panel>
-                <Masonry
-                  breakpointCols={2}
-                  columnClassName=""
-                  className="flex gap-2"
-                >
-                  {photos.map((photo, index) => (
-                    <Image
-                      key={photo.src}
-                      src={photo}
-                      alt="nature"
-                      className="my-2 hover:opacity-70 cursor-pointer"
-                      placeholder="blur"
-                      onClick={() => {
-                        lightboxRef.current?.openGallery(index);
-                      }}
-                    />
-                  ))}
-                </Masonry>
-                <LightGalleryComponent
-                  onInit={ref => {
-                    if (ref) lightboxRef.current = ref.instance;
-                  }}
-                  speed={500}
-                  plugins={[lgThumbnail, lgZoom]}
-                  dynamic
-                  dynamicEl={photos.map(photo => ({
-                    src: photo.src,
-                    thumb: photo.src
-                  }))}
-                />
+                <Gallery photos={[...oceans, ...forests]} />
               </Tab.Panel>
-              <Tab.Panel>Landscape </Tab.Panel>
-              <Tab.Panel>Oceans</Tab.Panel>
+              <Tab.Panel>
+                <Gallery photos={oceans} />
+              </Tab.Panel>
+              <Tab.Panel>
+                <Gallery photos={forests} />
+              </Tab.Panel>
             </Tab.Panels>
           </Tab.Group>
         </div>
@@ -128,3 +125,5 @@ export default function Home() {
     </div>
   );
 }
+
+
