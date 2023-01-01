@@ -10,8 +10,6 @@ import "lightgallery/css/lg-thumbnail.css"
 import lgThumbnail from "lightgallery/plugins/thumbnail";
 import lgZoom from "lightgallery/plugins/zoom";
 
-
-
 type GalleryProps = {
     photos: Photo[];
   };
@@ -21,7 +19,7 @@ export function Gallery({ photos }: GalleryProps) {
       <>
         <Masonry breakpointCols={2} columnClassName="" className="flex gap-2">
           {photos.map((photo, index) => (
-            <div className="relative">
+            <div className="relative" key={index}>
               <Image
                 key={photo.src}
                 src={photo.src}
