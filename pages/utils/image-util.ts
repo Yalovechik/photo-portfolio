@@ -2,13 +2,13 @@ import lqip from "lqip-modern";
 import { Photo } from "../../types";
 import { createApi } from "unsplash-js";
 
-const getimageUrl = async function(url: string) {
+async function getimageUrl(url: string) {
   const dataUrl = await fetch(url);
   const arrayBufferData = await dataUrl.arrayBuffer();
   const lqipData = await lqip(Buffer.from(arrayBufferData));
 
   return lqipData.metadata.dataURIBase64;
-};
+}
 
 export async function getImages(
   cli: ReturnType<typeof createApi>,
