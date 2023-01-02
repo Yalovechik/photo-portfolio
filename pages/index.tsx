@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Tab } from "@headlessui/react";
 
 
+
+
 // import bgimg
 import bgImg from "../public/portfolio-bg.jpg";
 // import lightbox
@@ -16,10 +18,12 @@ import { useRef } from "react";
 import { GetStaticProps } from "next";
 
 // importNodeFetch
-import * as nodeFetch from "node-fetch";
+import  nodeFetch from "node-fetch";
 import { createApi } from "unsplash-js";
 import { Gallery } from "./Gallery";
-import { getImages } from "./utils/image-util";
+import { getImages } from "./utils/image-util"
+
+
 
 const tabs = [
   {
@@ -44,7 +48,7 @@ type HomeProps = {
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const unsplash = createApi({
     accessKey: process.env.UNSPLASH_ACCES_KEY!,
-    fetch: (nodeFetch.default as unknown) as typeof fetch
+    fetch: (nodeFetch as unknown) as typeof fetch
   });
 
   const [oceans, forests] = await Promise.all([
