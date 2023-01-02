@@ -5,7 +5,7 @@ import { Inter } from "@next/font/google";
 import Link from "next/link";
 import { Tab } from "@headlessui/react";
 
-import { SocialIcon } from "react-social-icons";
+
 // import bgimg
 import bgImg from "../public/portfolio-bg.jpg";
 // import lightbox
