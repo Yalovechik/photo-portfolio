@@ -10,6 +10,7 @@ import "lightgallery/css/lg-thumbnail.css";
 import lgThumbnail from "lightgallery/plugins/thumbnail";
 import lgZoom from "lightgallery/plugins/zoom";
 
+
 type GalleryProps = {
     photos: Photo[];
   };
