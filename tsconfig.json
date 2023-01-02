@@ -19,6 +19,8 @@
   "exclude": ["node_modules"],
   "ts-node": {
     "transpileOnly": false,
-    "compilerOptions": { "module": "CommonJs" }
+    "compilerOptions": {
+      "module": "CommonJs"
+    }
   }
 }
