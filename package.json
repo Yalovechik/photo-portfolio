@@ -24,6 +24,7 @@
     "react-dom": "18.2.0",
     "react-masonry-css": "^1.0.16",
     "react-social-icons": "^5.15.0",
+    "sharp": "^0.31.3",
     "unsplash-js": "^7.0.15",
     "uuid": "^9.0.0"
   },
